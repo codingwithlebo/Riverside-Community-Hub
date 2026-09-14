@@ -1,0 +1,528 @@
+:root {
+  --ink: #24291f;
+  --paper: #f6f3e9;
+  --moss: #3c5a45;
+  --moss-dark: #2a4130;
+  --clay: #b5652f;
+  --line: #d8d2bf;
+  --error: #a13d2d;
+  font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.topbar .mark {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.topbar nav {
+  display: flex;
+  gap: 1.5rem;
+  align-items: baseline;
+  font-size: 0.95rem;
+}
+
+.topbar nav a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.topbar nav a:hover {
+  border-bottom-color: var(--clay);
+}
+
+.topbar button.link {
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 26rem;
+}
+
+.auth-card h1 {
+  font-size: 1.6rem;
+  margin-bottom: 0.3rem;
+}
+
+.auth-card p.lede {
+  color: #55594c;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.field {
+  margin-bottom: 1.1rem;
+}
+
+.field label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+  color: #45493c;
+}
+
+.field input {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--line);
+  background: #fffdf7;
+  border-radius: 3px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--ink);
+}
+
+.field input:focus {
+  outline: 2px solid var(--moss);
+  outline-offset: 1px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 0.7rem;
+  background: var(--moss);
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 0.4rem;
+}
+
+.btn-primary:hover {
+  background: var(--moss-dark);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.switch-line {
+  margin-top: 1.5rem;
+  font-size: 0.92rem;
+  color: #55594c;
+}
+
+.switch-line a {
+  color: var(--moss-dark);
+}
+
+.form-error {
+  background: #f9e9e4;
+  border: 1px solid #e2b8a8;
+  color: var(--error);
+  padding: 0.6rem 0.8rem;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  margin-bottom: 1.1rem;
+}
+
+.form-notice {
+  background: #eaf0e6;
+  border: 1px solid #c4d4bb;
+  color: var(--moss-dark);
+  padding: 0.6rem 0.8rem;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  margin-bottom: 1.1rem;
+}
+
+.dashboard h1 {
+  font-size: 1.7rem;
+  margin-bottom: 0.25rem;
+}
+
+.dashboard p.sub {
+  color: #55594c;
+  margin-top: 0;
+}
+
+.role-pill {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--clay);
+  color: #fff;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
+/* ---- wide content pages (catalogue, booking, my bookings) ---- */
+
+.page-wide {
+  width: 100%;
+  max-width: 46rem;
+}
+
+.page-wide h1 {
+  font-size: 1.7rem;
+  margin-bottom: 0.25rem;
+}
+
+.page-wide h2 {
+  font-size: 1.1rem;
+  margin-top: 2rem;
+  margin-bottom: 0.6rem;
+}
+
+.page-wide p.sub {
+  color: #55594c;
+  margin-top: 0;
+}
+
+.back-link {
+  display: inline-block;
+  color: var(--moss-dark);
+  text-decoration: none;
+  margin-bottom: 1rem;
+  font-size: 0.92rem;
+}
+
+.type-tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: #55594c;
+  margin-bottom: 0.5rem;
+}
+
+.type-tag.room {
+  border-color: var(--moss);
+  color: var(--moss-dark);
+}
+
+.type-tag.equipment {
+  border-color: var(--clay);
+  color: var(--clay);
+}
+
+.capacity {
+  font-size: 0.9rem;
+  color: #55594c;
+}
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.resource-card {
+  display: block;
+  text-decoration: none;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1.1rem;
+  background: #fffdf7;
+}
+
+.resource-card:hover {
+  border-color: var(--moss);
+}
+
+.resource-card h2 {
+  font-size: 1.05rem;
+  margin: 0.2rem 0 0.35rem;
+}
+
+.resource-card p {
+  font-size: 0.9rem;
+  color: #55594c;
+  margin: 0.2rem 0;
+}
+
+.slot-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.slot-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.status-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  text-transform: lowercase;
+}
+
+.status-tag.pending {
+  background: #f3e6c8;
+  color: #7a5b16;
+}
+
+.status-tag.approved {
+  background: #dfeadb;
+  color: var(--moss-dark);
+}
+
+.status-tag.rejected {
+  background: #f9e0da;
+  color: var(--error);
+}
+
+.status-tag.cancelled {
+  background: #ece9dd;
+  color: #6b6e5e;
+}
+
+.booking-form {
+  max-width: 22rem;
+}
+
+.booking-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+}
+
+.booking-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---- staff/admin dashboard ---- */
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.9rem;
+  margin: 1.5rem 0;
+}
+
+.stat-card {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.9rem 1rem;
+  background: #fffdf7;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--moss-dark);
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  color: #55594c;
+}
+
+.approval-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.approval-actions button {
+  font-family: inherit;
+  font-size: 0.85rem;
+  border-radius: 3px;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-approve {
+  background: var(--moss);
+  color: #fff;
+}
+
+.btn-approve:hover {
+  background: var(--moss-dark);
+}
+
+.btn-reject {
+  background: none;
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.btn-reject:hover {
+  background: #f9e9e4;
+}
+
+.approval-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 20rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: #fffdf7;
+  margin-bottom: 1rem;
+}
+
+.member-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.member-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.95rem;
+}
+
+.member-row .sub {
+  color: #55594c;
+  font-size: 0.85rem;
+}
+
+/* ---- donation page ---- */
+
+.progress-wrap {
+  margin: 1.5rem 0 2rem;
+}
+
+.progress-track {
+  height: 0.9rem;
+  background: #eae6d6;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--clay);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.progress-stats {
+  margin-top: 0.5rem;
+  font-size: 0.92rem;
+  color: #45493c;
+}
+
+.donate-form {
+  max-width: 24rem;
+}
+
+.pledge-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid var(--line);
+  background: #fffdf7;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.toggle-btn.active {
+  border-color: var(--moss);
+  background: #eaf0e6;
+  color: var(--moss-dark);
+}
+
+.pledge-note {
+  font-size: 0.85rem;
+  color: #55594c;
+  background: #f3efe0;
+  padding: 0.6rem 0.75rem;
+  border-radius: 3px;
+  margin-bottom: 1rem;
+}
+
+.amount-presets {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
+  flex-wrap: wrap;
+}
+
+.amount-btn {
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--line);
+  background: #fffdf7;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.amount-btn.active {
+  background: var(--clay);
+  border-color: var(--clay);
+  color: #fff;
+}
