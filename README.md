@@ -1,142 +1,120 @@
-# ⚡ FastPay
+# Riverside Community Hub
 
-> **Tip creators. Pay freelancers. Donate to causes.**
-> Human-readable payments on Solana — no wallet addresses needed.
+A membership, booking, and donations platform for Riverside Community Hub — a
+nonprofit community centre offering youth programmes, a small gym, meeting/
+event rooms, and a food-parcel donation drive.
 
----
+Built as Melsoft Academy Company Project 3.
 
-## 🧠 The Problem
-
-Web3 wallet addresses look like this:
-
-```
-7xKp3mNqRs8vBtWzYeLdFgHjKoMnPqRs3mNq
-```
-
-One wrong character and your money is gone forever. This is the #1 reason everyday people don't use crypto for payments like tipping a creator, paying a freelancer, or donating to a cause.
-
-## ✅ Our Solution
-
-FastPay abstracts wallet addresses into:
-
-- **Human-readable usernames** → `@malebo`
-- **Simple payment links** → `fastpay.id/@malebo`
-- **Dynamic QR codes** → scan and pay in one tap via Phantom
-
-No errors. No confusion. One click.
-
----
-
-## 🚀 Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18 + Vite |
-| Styling | Tailwind CSS v3 |
-| Blockchain | Solana (Devnet) |
-| Wallet | Phantom Wallet |
-| Icons | Tabler Icons React |
-
----
-
-## 🎯 Use Cases
-
-- 🎨 **Creator tipping** — streamers, YouTubers, artists receive SOL tips via QR on screen
-- 💼 **Freelancer invoicing** — share a payment link in WhatsApp, no bank details needed
-- 🌍 **Donations** — charities and causes accept borderless crypto donations instantly
-
----
-
-## 📁 Project Structure
+## Architecture
 
 ```
-src/
-├── components/
-│   ├── Topbar.jsx          # Navigation bar + Phantom connect
-│   ├── Sidebar.jsx         # Left nav + wallet balance card
-│   ├── PhantomModal.jsx    # Animated wallet connection flow
-│   └── SuccessOverlay.jsx  # Payment success screen
-├── pages/
-│   ├── TipPage.jsx         # Search user + send tip flow
-│   ├── Dashboard.jsx       # Earnings charts + activity feed
-│   ├── History.jsx         # Full transaction table
-│   ├── Profile.jsx         # User identity settings
-│   └── QRPage.jsx          # QR code + dynamic invoice
-├── data/
-│   └── users.js            # Mock user + transaction data
-├── App.jsx                 # Root component + page routing
-└── index.css               # Tailwind directives + custom classes
+┌─────────────────┐      ┌──────────────────┐      ┌──────────────────┐
+│  React + TS      │──────▶  Express + TS API │──────▶  Supabase        │
+│  (frontend/)      │      │  (backend/)       │      │  Postgres + Auth  │
+│  Vite, Router     │◀──────  RLS-scoped        │◀──────  Row Level       │
+└─────────────────┘      └──────────────────┘      │  Security         │
+        │                                            └──────────────────┘
+        └───────────────── direct calls for auth/session (Supabase JS) ────┘
 ```
 
----
+- **Frontend** (`/frontend`) — React + TypeScript (Vite). Handles auth
+  (signup/login via Supabase directly), the public resource catalogue,
+  booking requests, the donation page, and a role-gated staff/admin
+  dashboard. Talks to the backend for anything that needs server-side
+  validation (bookings, donations, admin views).
+- **Backend** (`/backend`) — Express + TypeScript. Verifies each request's
+  Supabase JWT, loads the caller's role from `profiles`, and proxies
+  requests through a per-user Supabase client so **Row Level Security
+  policies apply exactly as they would from the browser** — the backend
+  never uses its elevated service-role access for user-facing reads/writes.
+- **Supabase** — Postgres database, Auth (email/password with email
+  confirmation), and Row Level Security policies enforcing who can read or
+  write what, at the database layer, not just the UI.
 
-## 🛠️ Getting Started
+## User roles
+
+| Role | Can do |
+|---|---|
+| Public visitor | Browse resources, view availability, see donation progress |
+| Member | Book resources, view own bookings, donate |
+| Staff | Approve/reject bookings, view member directory & reports |
+| Admin | Everything staff can, plus manage staff accounts (manual, via DB for now) |
+
+Enforced by Supabase Auth + RLS policies on every table — see
+`backend/README` schema notes below.
+
+## Local setup
 
 ### Prerequisites
-- Node.js v18+
-- npm v9+
-- Git
+- Node.js 20+
+- A Supabase project (free tier is fine)
 
-### Installation
+### 1. Database
+In your Supabase project's SQL Editor, run **`backend/schema.sql`** in full.
+It creates every table, the RLS policies, the auto-profile-on-signup
+trigger, and seeds a few starter resources and a donation campaign.
+
+### 2. Backend
 
 ```bash
-# Clone the repo
-git clone https://github.com/codingwithlebo/fastpay-ui.git
-
-# Navigate into the project
-cd fastpay-ui
-
-# Install dependencies
+cd backend
 npm install
+cp .env.example .env
+```
 
-# Start the dev server
+Fill in `.env`:
+
+| Variable | Where to find it |
+|---|---|
+| `PORT` | Any free port, defaults to 4000 |
+| `SUPABASE_URL` | Supabase dashboard → Project Settings → API → Project URL |
+| `SUPABASE_ANON_KEY` | Same page → publishable/anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Same page → secret/service_role key. **Never commit this or share it — it bypasses RLS entirely.** |
+
+```bash
 npm run dev
 ```
 
-Open **http://localhost:5173** in your browser.
+Runs at `http://localhost:4000`. Check `http://localhost:4000/health`.
 
----
+### 3. Frontend
 
-## 🎮 Demo Flow
+```bash
+cd frontend
+npm install
+cp .env.example .env
+```
 
-1. Go to **Send Tip** page
-2. Search for `@malebo`, `@dev_rizky`, or `@jacob_codes`
-3. Select an amount and click **Send via Phantom**
-4. Watch the success screen — transaction confirmed on Solana devnet
-5. Check **Dashboard** for live charts and activity
-6. Check **QR Code** page to see your shareable payment link
+Fill in `.env`:
 
----
+| Variable | Where to find it |
+|---|---|
+| `VITE_SUPABASE_URL` | Same Supabase Project URL as above |
+| `VITE_SUPABASE_ANON_KEY` | Same publishable/anon key as above (safe for the browser — RLS is what actually protects the data) |
+| `VITE_API_URL` | `http://localhost:4000` locally, or the deployed backend URL in production |
 
-## 🗺️ Roadmap
+```bash
+npm run dev
+```
 
-- [x] Frontend UI — React + Tailwind
-- [x] Username search + profile lookup
-- [x] Phantom wallet connection flow
-- [x] QR code generation
-- [ ] Real Phantom wallet integration (`@solana/web3.js`)
-- [ ] Username → wallet address database (Supabase)
-- [ ] On-chain transaction signing
-- [ ] Mainnet deployment
+Runs at `http://localhost:5173`.
 
----
+## Environment variables — full reference
 
-## 👥 Team
+**Never commit `.env` files.** Both folders `.gitignore` them; only
+`.env.example` (with placeholder values) is checked in.
 
-Built at the **Dev3pack Global Web3 Hackathon 2026**
+| File | Variable | Sensitive? |
+|---|---|---|
+| `backend/.env` | `SUPABASE_SERVICE_ROLE_KEY` | Yes — full DB access, bypasses RLS |
+| `backend/.env` | `SUPABASE_URL`, `SUPABASE_ANON_KEY` | No — safe to expose |
+| `frontend/.env` | `VITE_SUPABASE_ANON_KEY`, `VITE_SUPABASE_URL` | No — designed to be public, RLS enforces access |
 
-| Name | Role |
-|------|------|
-| Malebo Nkuna | Frontend · UI/UX · Pitch |
-| Rizky Januar | Solana · Smart Contracts |
-| Jacob Mensah | Backend · APIs · n8n |
+## Project status
 
----
-
-## 📄 License
-
-MIT — free to use, modify, and build on.
-
----
-
-> *"The best Web3 UX is the one that doesn't feel like Web3 at all."*
+See the project brief's deliverables checklist for full scope. Core
+functional flows (auth, bookings with approval workflow, donations with
+progress tracking, staff dashboard with reporting) are implemented and
+tested against a live Supabase project. Deployment and final polish are
+tracked separately.
